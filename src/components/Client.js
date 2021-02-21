@@ -1,15 +1,22 @@
-import React, { useState} from 'react'
+import React, { useState } from 'react'
 import { db } from '../firebase'
 import { Link } from "react-router-dom";
+import emailjs from 'emailjs-com'
 
 function Client() {
 
     const [menu, setMenu] = useState([]);
     const [total, setTotal] = useState(() => { return 0 });
 
-    const generarFactura = () => {
-        
-        db.collection("Facturas").doc("XQDDWDOPQMDPW!@NP").set({
+    const generarFactura = async (event) => {
+        event.preventDefault();
+
+        /*let factura = []
+        factura.push("XQDDWDOPQMDPW!@NP")
+        factura.push(total)
+        factura.push(menu)*/
+
+        let store = await db.collection("Facturas").doc("XQDDWDOPQMDPW!@NP").set({
             DocID: "XQDDWDOPQMDPW!@NP",
             Total: total,
             Menu: menu
@@ -37,8 +44,8 @@ function Client() {
                 setSubtotal(subtotal + (event.target.value - (event.target.value * 0.12)))*/
             var numero = Number(event.target.value)
             setTotal(prevTot => prevTot + (numero * input.value))
-        }else{
-           alert("no amount selected"); 
+        } else {
+            alert("no amount selected");
         }
     }
 
@@ -81,17 +88,17 @@ function Client() {
                     <div class="w-full lg:w-3/5 min-h-screen shadow-lg">
                         <div class="flex flex-row justify-between items-center px-5 mt-5">
                             <div class="text-gray-800">
-                                <div class="font-bold text-xl">NAME</div>
+                                <div class="font-bold text-xl">IM HUNGRY</div>
                                 <span class="text-xs">ID#123</span>
                             </div>
                             <div class="flex items-center">
                                 <div className="space-x-5">
-                                    <button class="px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded"><Link to= {{
-                                                            pathname:'/admin',
-                                                            aboutProps:{
-                                                                menu: menu
-                                                            }
-                                                        }} className="btn btn-primary rounded cursor-pointer">Orders</Link></button>
+                                    <button class="px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded"><Link to={{
+                                        pathname: '/admin',
+                                        aboutProps: {
+                                            menu: menu
+                                        }
+                                    }} className="btn btn-primary rounded cursor-pointer">Orders</Link></button>
                                     <button class="px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded">Help</button>
                                 </div>
                             </div>
@@ -349,12 +356,12 @@ function Client() {
                             <div class="px-4 py-5 rounded-md shadow-lg text-center bg-red-500 text-white font-semibold">
                                 Place order
                             </div>
-                            <div class="px-4 py-5 rounded-md shadow-lg text-center bg-yellow-500 text-white font-semibold" onClick={generarFactura}>
+                            <button class="px-4 py-5 rounded-md shadow-lg text-center bg-yellow-500 text-white font-semibold" onClick={generarFactura}>
                                 Pay With Cash
-                            </div>
-                            <div class="px-4 py-5 rounded-md shadow-lg text-center bg-yellow-500 text-white font-semibold" onClick={generarFactura}>
+                            </button>
+                            <button class="px-4 py-5 rounded-md shadow-lg text-center bg-yellow-500 text-white font-semibold" onClick={generarFactura}>
                                 Pay With Credis/Debit Card
-                            </div>
+                            </button>
                         </div>
 
                     </div>
