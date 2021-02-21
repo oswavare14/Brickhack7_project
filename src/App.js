@@ -1,6 +1,10 @@
+import React, { useState } from 'react'
 import { db } from './firebase'
 
 function App() {
+
+  const [menu, setMenu] = useState([]);
+  const [total, setTotal] = useState(() => {return 0});
 
   const agrega = () => {
     db.collection("Facturas").doc("123").set({
@@ -11,6 +15,46 @@ function App() {
     }).catch(() => {
       console.log("no funciona")
     })
+  }
+
+  const addItem = (event) => {
+    setMenu(prevItems => [...prevItems, {
+      name: event.target.name,
+      value: event.target.value
+    }]);
+/*
+    setTax(tax + (event.target.value * 0.12))
+    setSubtotal(subtotal + (event.target.value - (event.target.value * 0.12)))*/
+    var numero = Number(event.target.value)
+    setTotal(prevTotal => prevTotal + numero)
+  }
+
+  const handleRemoveItem = (event) => {
+    var flag = false
+    var element
+    for (let index = 0; index < menu.length; index++) {
+      element = menu[index];
+      if (element.name === event.target.name) {
+        flag = true
+        break
+      }
+    }
+
+    if (flag) {
+      setTotal(prevSub => prevSub - element.value)
+    }
+
+    const temp = [...menu];
+    temp.splice(event.target.name, 1);
+    setMenu(temp);
+  }
+
+  const handleRemoveAllItems = () => {
+    setMenu([]);
+    setTotal(0)
+  }
+
+  const handleChange = (event) => {
   }
 
   return (
@@ -39,9 +83,9 @@ function App() {
                 <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
-                      <div class="font-bold text-gray-800">Griled corn</div>
+                      <div class="font-bold text-gray-800">Pizza 1</div>
                     </div>
-                    <button className="bg-yellow-500 text-center text-white">Order</button>
+                    <button value={2} name="Pizza 1" className="bg-yellow-500 text-center text-white" onClick={addItem}>Order</button>
                   </div>
                   <span class="font-light text-sm text-gray-400">150g</span>
                   <div class="flex flex-row justify-between items-center">
@@ -53,7 +97,7 @@ function App() {
                 <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
-                      <div class="font-bold text-gray-800">Griled corn</div>
+                      <div class="font-bold text-gray-800">Pizza 2</div>
                     </div>
                     <button className="bg-yellow-500 text-center text-white">Order</button>
                   </div>
@@ -67,7 +111,7 @@ function App() {
                 <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
-                      <div class="font-bold text-gray-800">Griled corn</div>
+                      <div class="font-bold text-gray-800">Pizza 3</div>
                     </div>
                     <button className="bg-yellow-500 text-center text-white">Order</button>
                   </div>
@@ -81,7 +125,7 @@ function App() {
                 <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
-                      <div class="font-bold text-gray-800">Griled corn</div>
+                      <div class="font-bold text-gray-800">Pizza 4</div>
                     </div>
                     <button className="bg-yellow-500 text-center text-white">Order</button>
                   </div>
@@ -95,7 +139,7 @@ function App() {
                 <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
-                      <div class="font-bold text-gray-800">Griled corn</div>
+                      <div class="font-bold text-gray-800">Pizza 5</div>
                     </div>
                     <button className="bg-yellow-500 text-center text-white">Order</button>
                   </div>
@@ -111,7 +155,7 @@ function App() {
                 <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
-                      <div class="font-bold text-gray-800">Griled corn</div>
+                      <div class="font-bold text-gray-800">Burger 1</div>
                     </div>
                     <button className="bg-yellow-500 text-center text-white">Order</button>
                   </div>
@@ -125,7 +169,7 @@ function App() {
                 <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
-                      <div class="font-bold text-gray-800">Griled corn</div>
+                      <div class="font-bold text-gray-800">Burger 2</div>
                     </div>
                     <button className="bg-yellow-500 text-center text-white">Order</button>
                   </div>
@@ -139,7 +183,7 @@ function App() {
                 <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
-                      <div class="font-bold text-gray-800">Griled corn</div>
+                      <div class="font-bold text-gray-800">Burger 3</div>
                     </div>
                     <button className="bg-yellow-500 text-center text-white">Order</button>
                   </div>
@@ -150,15 +194,15 @@ function App() {
                   </div>
                 </div>
 
-                <div/>
-                <div/>
+                <div />
+                <div />
 
                 <div className="text-7xl">Drinks</div>
 
                 <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
-                      <div class="font-bold text-gray-800">Griled corn</div>
+                      <div class="font-bold text-gray-800">Drink 1</div>
                     </div>
                     <button className="bg-yellow-500 text-center text-white">Order</button>
                   </div>
@@ -172,7 +216,7 @@ function App() {
                 <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
-                      <div class="font-bold text-gray-800">Griled corn</div>
+                      <div class="font-bold text-gray-800">Drink 2</div>
                     </div>
                     <button className="bg-yellow-500 text-center text-white">Order</button>
                   </div>
@@ -186,7 +230,7 @@ function App() {
                 <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
-                      <div class="font-bold text-gray-800">Griled corn</div>
+                      <div class="font-bold text-gray-800">Drink 3</div>
                     </div>
                     <button className="bg-yellow-500 text-center text-white">Order</button>
                   </div>
@@ -200,7 +244,7 @@ function App() {
                 <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
-                      <div class="font-bold text-gray-800">Griled corn</div>
+                      <div class="font-bold text-gray-800">Drink 4</div>
                     </div>
                     <button className="bg-yellow-500 text-center text-white">Order</button>
                   </div>
@@ -211,10 +255,6 @@ function App() {
                   </div>
                 </div>
 
-                <div/>
-                <div/>
-                <div/>
-
               </div>
             </div>
           </div>
@@ -224,47 +264,49 @@ function App() {
             <div class="flex flex-row items-center justify-between px-5 mt-5">
               <div class="font-bold text-xl">Current Order</div>
               <div class="font-semibold">
-                <span class="px-4 py-2 rounded-md bg-red-100 text-red-500">Clear All</span>
+                <button class="px-4 py-2 rounded-md bg-red-100 text-red-500" onClick={handleRemoveAllItems}>Clear All</button>
               </div>
             </div>
 
             <div class="px-5 py-4 mt-5 overflow-y-auto h-64">
-              <div class="flex flex-row justify-between items-center mb-4">
-                <div class="flex flex-row items-center w-2/5">
-                  <img src="https://source.unsplash.com/4u_nRgiLW3M/600x600" class="w-10 h-10 object-cover rounded-md" alt="" />
-                  <span class="ml-4 font-semibold text-sm">Stuffed flank steak</span>
-                </div>
-                <div class="w-32 flex justify-between">
-                  <span class="px-3 py-1 rounded-md bg-gray-300 ">-</span>
-                  <span class="font-semibold mx-4">2</span>
-                  <span class="px-3 py-1 rounded-md bg-gray-300 ">+</span>
-                </div>
-                <div class="font-semibold text-lg w-16 text-center">
-                  $13.50
-                </div>
-              </div>
 
+              {menu.map(menu => {
+                const { name, value } = menu
+                return (<div>
+                  <div class="grid grid-cols-4">
+                    <div><span class="ml-4 font-semibold text-sm">{name}</span></div>
+                    <div class="w-32 flex justify-between">
+                      <input placeholder="1" onChange={handleChange} type="number" disable min={1} max={10} className="border border-gray-200 rounded-md " />
+                    </div>
+                    <div class="font-semibold text-lg w-16 text-center">
+                      ${value}.00
+                    </div>
+                    <div><button className="bg-red-500 h-6 w-6 text-white" name={name} onClick={handleRemoveItem}>x</button></div>
+                  </div>
+                </div>)
+              })
+              }
             </div>
-
+            {/*}
             <div class="px-5 mt-5">
               <div class="py-4 rounded-md shadow-lg">
                 <div class=" px-4 flex justify-between ">
                   <span class="font-semibold text-sm">Subtotal</span>
-                  <span class="font-bold">$35.25</span>
+                  <span class="font-bold">$ {subtotal}</span>
                 </div>
                 <div class=" px-4 flex justify-between ">
                   <span class="font-semibold text-sm">Tax</span>
-                  <span class="font-bold">$2.25</span>
+                  <span class="font-bold">$ {tax}</span>
                 </div>
               </div>
-            </div>
-
+            </div>*/
+            }
             <div class="px-5 mt-5">
               <div class="rounded-md shadow-lg px-4 py-4">
                 <div class="flex flex-row justify-between items-center">
                   <div class="flex flex-col">
                     <span class="uppercase text-xs font-semibold">Total</span>
-                    <span class="text-xl font-bold text-yellow-500">$32.50</span>
+                    <span class="text-xl font-bold text-yellow-500">${total}</span>
                   </div>
                   <div class="px-4 py-3 bg-gray-300 text-gray-800 rounded-md font-bold">Cancel</div>
                 </div>
