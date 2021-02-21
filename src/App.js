@@ -4,7 +4,7 @@ import { db } from './firebase'
 function App() {
 
   const [menu, setMenu] = useState([]);
-  const [total, setTotal] = useState(() => {return 0});
+  const [total, setTotal] = useState(() => { return 0 });
 
   const agrega = () => {
     db.collection("Facturas").doc("123").set({
@@ -17,22 +17,31 @@ function App() {
     })
   }
 
+  const refreshPage = () => {
+    window.location.reload()
+  }
+
   const addItem = (event) => {
+
+    const input = document.getElementById(event.target.name + "_input")
+
     setMenu(prevItems => [...prevItems, {
       name: event.target.name,
-      value: event.target.value
+      value: event.target.value,
+      cantidad: input.value
     }]);
-/*
-    setTax(tax + (event.target.value * 0.12))
-    setSubtotal(subtotal + (event.target.value - (event.target.value * 0.12)))*/
+    /*
+        setTax(tax + (event.target.value * 0.12))
+        setSubtotal(subtotal + (event.target.value - (event.target.value * 0.12)))*/
     var numero = Number(event.target.value)
-    setTotal(prevTotal => prevTotal + numero)
+    setTotal(prevTot => prevTot + (numero * input.value))
   }
 
   const handleRemoveItem = (event) => {
     var flag = false
     var element
-    for (let index = 0; index < menu.length; index++) {
+    var index
+    for (index = 0; index < menu.length; index++) {
       element = menu[index];
       if (element.name === event.target.name) {
         flag = true
@@ -41,11 +50,11 @@ function App() {
     }
 
     if (flag) {
-      setTotal(prevSub => prevSub - element.value)
+      setTotal(prevTot => prevTot - (element.value * element.cantidad))
     }
 
     const temp = [...menu];
-    temp.splice(event.target.name, 1);
+    temp.splice(index, 1);
     setMenu(temp);
   }
 
@@ -55,6 +64,9 @@ function App() {
   }
 
   const handleChange = (event) => {
+    /*var numero = Number(event.target.id)
+    var numero1 = Number(event.target.value)
+    setTotal(prevTot => prevTot + (numero * numero1))*/
   }
 
   return (
@@ -80,117 +92,125 @@ function App() {
 
                 <div className="text-7xl">Pizzas</div>
 
-                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
+                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-48 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
                       <div class="font-bold text-gray-800">Pizza 1</div>
                     </div>
                     <button value={2} name="Pizza 1" className="bg-yellow-500 text-center text-white" onClick={addItem}>Order</button>
                   </div>
+                  <input id="Pizza 1_input" placeholder="1" type="number" min={1} max={10} className="w-14 border border-gray-200 rounded-md " />
                   <span class="font-light text-sm text-gray-400">150g</span>
                   <div class="flex flex-row justify-between items-center">
-                    <span class="self-end font-bold text-lg text-yellow-500">$1.75</span>
-                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/PIZZAS/001.jpg" class=" h-14 w-14 object-cover rounded-md" alt="" />
+                    <span class="self-end font-bold text-lg text-yellow-500">$2.00</span>
+                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/PIZZAS/001.jpg" class=" h-24 w-24 object-cover rounded-md" alt="" />
                   </div>
                 </div>
 
-                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
+                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-48 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
                       <div class="font-bold text-gray-800">Pizza 2</div>
                     </div>
-                    <button className="bg-yellow-500 text-center text-white">Order</button>
+                    <button value={3} name="Pizza 2" className="bg-yellow-500 text-center text-white" onClick={addItem}>Order</button>
                   </div>
+                  <input id="Pizza 2_input" placeholder="1" type="number" min={1} max={10} className="w-14 border border-gray-200 rounded-md " />
                   <span class="font-light text-sm text-gray-400">150g</span>
                   <div class="flex flex-row justify-between items-center">
-                    <span class="self-end font-bold text-lg text-yellow-500">$1.75</span>
-                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/PIZZAS/SUPER%20SUPREMA.jpg" class=" h-14 w-14 object-cover rounded-md" alt="" />
+                    <span class="self-end font-bold text-lg text-yellow-500">$3.00</span>
+                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/PIZZAS/SUPER%20SUPREMA.jpg" class=" h-24 w-24 object-cover rounded-md" alt="" />
                   </div>
                 </div>
 
-                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
+                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-48 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
                       <div class="font-bold text-gray-800">Pizza 3</div>
                     </div>
-                    <button className="bg-yellow-500 text-center text-white">Order</button>
+                    <button value={3} name="Pizza 3" className="bg-yellow-500 text-center text-white" onClick={addItem}>Order</button>
                   </div>
+                  <input id="Pizza 3_input" placeholder="1" type="number" min={1} max={10} className="w-14 border border-gray-200 rounded-md " />
                   <span class="font-light text-sm text-gray-400">150g</span>
                   <div class="flex flex-row justify-between items-center">
-                    <span class="self-end font-bold text-lg text-yellow-500">$1.75</span>
-                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/PIZZAS/CANADIENSE.jpg" class=" h-14 w-14 object-cover rounded-md" alt="" />
+                    <span class="self-end font-bold text-lg text-yellow-500">$3.00</span>
+                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/PIZZAS/CANADIENSE.jpg" class=" h-24 w-24 object-cover rounded-md" alt="" />
                   </div>
                 </div>
 
-                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
+                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-48 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
                       <div class="font-bold text-gray-800">Pizza 4</div>
                     </div>
-                    <button className="bg-yellow-500 text-center text-white">Order</button>
+                    <button value={2} name="Pizza 4" className="bg-yellow-500 text-center text-white" onClick={addItem}>Order</button>
                   </div>
+                  <input id="Pizza 4_input" placeholder="1" type="number" min={1} max={10} className="w-14 border border-gray-200 rounded-md " />
                   <span class="font-light text-sm text-gray-400">150g</span>
                   <div class="flex flex-row justify-between items-center">
-                    <span class="self-end font-bold text-lg text-yellow-500">$1.75</span>
-                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/PIZZAS/PEPPERONI%20O%20JAMON%20LOVERS.jpg" class=" h-14 w-14 object-cover rounded-md" alt="" />
+                    <span class="self-end font-bold text-lg text-yellow-500">$2.00</span>
+                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/PIZZAS/PEPPERONI%20O%20JAMON%20LOVERS.jpg" class=" h-24 w-24 object-cover rounded-md" alt="" />
                   </div>
                 </div>
 
-                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
+                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-48 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
                       <div class="font-bold text-gray-800">Pizza 5</div>
                     </div>
-                    <button className="bg-yellow-500 text-center text-white">Order</button>
+                    <button value={3} name="Pizza 5" className="bg-yellow-500 text-center text-white" onClick={addItem}>Order</button>
                   </div>
+                  <input id="Pizza 5_input" placeholder="1" type="number" min={1} max={10} className="w-14 border border-gray-200 rounded-md " />
                   <span class="font-light text-sm text-gray-400">150g</span>
                   <div class="flex flex-row justify-between items-center">
-                    <span class="self-end font-bold text-lg text-yellow-500">$1.75</span>
-                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/PIZZAS/SUPREMA.jpg" class=" h-14 w-14 object-cover rounded-md" alt="" />
+                    <span class="self-end font-bold text-lg text-yellow-500">$3.00</span>
+                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/PIZZAS/SUPREMA.jpg" class=" h-24 w-24 object-cover rounded-md" alt="" />
                   </div>
                 </div>
 
                 <div className="text-7xl">Burgers</div>
 
-                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
+                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-48 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
                       <div class="font-bold text-gray-800">Burger 1</div>
                     </div>
-                    <button className="bg-yellow-500 text-center text-white">Order</button>
+                    <button value={3} name="Burger 1" className="bg-yellow-500 text-center text-white" onClick={addItem}>Order</button>
                   </div>
+                  <input id="Burger 1_input" placeholder="1" type="number" min={1} max={10} className="w-14 border border-gray-200 rounded-md " />
                   <span class="font-light text-sm text-gray-400">150g</span>
                   <div class="flex flex-row justify-between items-center">
-                    <span class="self-end font-bold text-lg text-yellow-500">$1.75</span>
-                    <img src="https://pinchofyum.com/wp-content/uploads/Tofu-Burgers-Square.jpg" class=" h-14 w-14 object-cover rounded-md" alt="" />
+                    <span class="self-end font-bold text-lg text-yellow-500">$3.00</span>
+                    <img src="https://pinchofyum.com/wp-content/uploads/Tofu-Burgers-Square.jpg" class=" h-24 w-24 object-cover rounded-md" alt="" />
                   </div>
                 </div>
 
-                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
+                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-48 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
                       <div class="font-bold text-gray-800">Burger 2</div>
                     </div>
-                    <button className="bg-yellow-500 text-center text-white">Order</button>
+                    <button value={5} name="Burger 2" className="bg-yellow-500 text-center text-white" onClick={addItem}>Order</button>
                   </div>
+                  <input id="Burger 2_input" placeholder="1" type="number" min={1} max={10} className="w-14 border border-gray-200 rounded-md " />
                   <span class="font-light text-sm text-gray-400">150g</span>
                   <div class="flex flex-row justify-between items-center">
-                    <span class="self-end font-bold text-lg text-yellow-500">$1.75</span>
-                    <img src="https://vignette.wikia.nocookie.net/eruowood/images/c/ca/BBQ_Tendercrisp_chicken_sandwich.png/revision/latest?cb=20150731202858" class=" h-14 w-14 object-cover rounded-md" alt="" />
+                    <span class="self-end font-bold text-lg text-yellow-500">$5.00</span>
+                    <img src="https://vignette.wikia.nocookie.net/eruowood/images/c/ca/BBQ_Tendercrisp_chicken_sandwich.png/revision/latest?cb=20150731202858" class=" h-24 w-24 object-cover rounded-md" alt="" />
                   </div>
                 </div>
 
-                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
+                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-48 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
                       <div class="font-bold text-gray-800">Burger 3</div>
                     </div>
-                    <button className="bg-yellow-500 text-center text-white">Order</button>
+                    <button value={3} name="Burger 3" className="bg-yellow-500 text-center text-white" onClick={addItem}>Order</button>
                   </div>
+                  <input id="Burger 3_input" placeholder="1" type="number" min={1} max={10} className="w-14 border border-gray-200 rounded-md " />
                   <span class="font-light text-sm text-gray-400">150g</span>
                   <div class="flex flex-row justify-between items-center">
-                    <span class="self-end font-bold text-lg text-yellow-500">$1.75</span>
-                    <img src="https://th.bing.com/th/id/Rc87556d1f68c61ead6230c77a5e50a51?rik=saV7ZpA7y7ekcg&riu=http%3a%2f%2fcdn2.coachmag.co.uk%2fsites%2fcoachmag%2ffiles%2fstyles%2finsert_main_wide_image%2fpublic%2f2017%2f08%2fchicken-burger.jpg%3fitok%3dSiWTYMBr&ehk=szbi8Z9fmZm9PH%2frK1rZkS2NuiViw7WBO4E6BaaFC%2b0%3d&risl=&pid=ImgRaw" class=" h-14 w-14 object-cover rounded-md" alt="" />
+                    <span class="self-end font-bold text-lg text-yellow-500">$3.00</span>
+                    <img src="https://th.bing.com/th/id/Rc87556d1f68c61ead6230c77a5e50a51?rik=saV7ZpA7y7ekcg&riu=http%3a%2f%2fcdn2.coachmag.co.uk%2fsites%2fcoachmag%2ffiles%2fstyles%2finsert_main_wide_image%2fpublic%2f2017%2f08%2fchicken-burger.jpg%3fitok%3dSiWTYMBr&ehk=szbi8Z9fmZm9PH%2frK1rZkS2NuiViw7WBO4E6BaaFC%2b0%3d&risl=&pid=ImgRaw" class=" h-24 w-24 object-cover rounded-md" alt="" />
                   </div>
                 </div>
 
@@ -199,59 +219,63 @@ function App() {
 
                 <div className="text-7xl">Drinks</div>
 
-                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
+                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-48 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
                       <div class="font-bold text-gray-800">Drink 1</div>
                     </div>
-                    <button className="bg-yellow-500 text-center text-white">Order</button>
+                    <button value={1} name="Drink 1" className="bg-yellow-500 text-center text-white" onClick={addItem}>Order</button>
                   </div>
+                  <input id="Drink 1_input" placeholder="1" type="number" min={1} max={10} className="w-14 border border-gray-200 rounded-md " />
                   <span class="font-light text-sm text-gray-400">150g</span>
                   <div class="flex flex-row justify-between items-center">
-                    <span class="self-end font-bold text-lg text-yellow-500">$1.75</span>
-                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/BEBIDAS/PEPSI%20500%20ML.png" class=" h-14 w-14 object-cover rounded-md" alt="" />
+                    <span class="self-end font-bold text-lg text-yellow-500">$1.00</span>
+                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/BEBIDAS/PEPSI%20500%20ML.png" class=" h-24 w-24 object-cover rounded-md" alt="" />
                   </div>
                 </div>
 
-                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
+                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-48 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
                       <div class="font-bold text-gray-800">Drink 2</div>
                     </div>
-                    <button className="bg-yellow-500 text-center text-white">Order</button>
+                    <button value={1} name="Drink 2" className="bg-yellow-500 text-center text-white" onClick={addItem}>Order</button>
                   </div>
+                  <input id="Drink 2_input" placeholder="1" type="number" min={1} max={10} className="w-14 border border-gray-200 rounded-md " />
                   <span class="font-light text-sm text-gray-400">150g</span>
                   <div class="flex flex-row justify-between items-center">
-                    <span class="self-end font-bold text-lg text-yellow-500">$1.75</span>
-                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/BEBIDAS/MIRINDA%20500%20ML.png" class=" h-14 w-14 object-cover rounded-md" alt="" />
+                    <span class="self-end font-bold text-lg text-yellow-500">$1.00</span>
+                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/BEBIDAS/MIRINDA%20500%20ML.png" class=" h-24 w-24 object-cover rounded-md" alt="" />
                   </div>
                 </div>
 
-                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
+                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-48 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
                       <div class="font-bold text-gray-800">Drink 3</div>
                     </div>
-                    <button className="bg-yellow-500 text-center text-white">Order</button>
+                    <button value={1} name="Drink 3" className="bg-yellow-500 text-center text-white" onClick={addItem}>Order</button>
                   </div>
+                  <input id="Drink 3_input" placeholder="1" type="number" min={1} max={10} className="w-14 border border-gray-200 rounded-md " />
                   <span class="font-light text-sm text-gray-400">150g</span>
                   <div class="flex flex-row justify-between items-center">
-                    <span class="self-end font-bold text-lg text-yellow-500">$1.75</span>
-                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/BEBIDAS/7%20500%20ML.png" class=" h-14 w-14 object-cover rounded-md" alt="" />
+                    <span class="self-end font-bold text-lg text-yellow-500">$1.00</span>
+                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/BEBIDAS/7%20500%20ML.png" class=" h-24 w-24 object-cover rounded-md" alt="" />
                   </div>
                 </div>
 
-                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between">
+                <div class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-48 justify-between">
                   <div className="grid grid-cols-3">
                     <div className="col-span-2">
                       <div class="font-bold text-gray-800">Drink 4</div>
                     </div>
-                    <button className="bg-yellow-500 text-center text-white">Order</button>
+                    <button value={1} name="Drink 4" className="bg-yellow-500 text-center text-white" onClick={addItem}>Order</button>
                   </div>
+                  <input id="Drink 4_input" placeholder="1" type="number" min={1} max={10} className="w-14 border border-gray-200 rounded-md " />
                   <span class="font-light text-sm text-gray-400">150g</span>
                   <div class="flex flex-row justify-between items-center">
-                    <span class="self-end font-bold text-lg text-yellow-500">$1.75</span>
-                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/BEBIDAS/AGUAZUL.png" class=" h-14 w-14 object-cover rounded-md" alt="" />
+                    <span class="self-end font-bold text-lg text-yellow-500">$1.00</span>
+                    <img src="https://www.pizzahutonline.hn/Imagenes/CATEGORIAS/BEBIDAS/AGUAZUL.png" class=" h-24 w-24 object-cover rounded-md" alt="" />
                   </div>
                 </div>
 
@@ -271,15 +295,12 @@ function App() {
             <div class="px-5 py-4 mt-5 overflow-y-auto h-64">
 
               {menu.map(menu => {
-                const { name, value } = menu
+                const { name, value, cantidad } = menu
                 return (<div>
-                  <div class="grid grid-cols-4">
-                    <div><span class="ml-4 font-semibold text-sm">{name}</span></div>
-                    <div class="w-32 flex justify-between">
-                      <input placeholder="1" onChange={handleChange} type="number" disable min={1} max={10} className="border border-gray-200 rounded-md " />
-                    </div>
-                    <div class="font-semibold text-lg w-16 text-center">
-                      ${value}.00
+                  <div class="grid grid-cols-3">
+                    <div><span class="ml-4 font-semibold text-lg">{name}</span></div>
+                    <div class="font-semibold text-base w-16 text-center">
+                      ${value}.00 x{cantidad}
                     </div>
                     <div><button className="bg-red-500 h-6 w-6 text-white" name={name} onClick={handleRemoveItem}>x</button></div>
                   </div>
@@ -308,14 +329,14 @@ function App() {
                     <span class="uppercase text-xs font-semibold">Total</span>
                     <span class="text-xl font-bold text-yellow-500">${total}</span>
                   </div>
-                  <div class="px-4 py-3 bg-gray-300 text-gray-800 rounded-md font-bold">Cancel</div>
+                  <button class="px-4 py-3 bg-gray-300 text-gray-800 rounded-md font-bold" onClick={refreshPage}>Cancel</button>
                 </div>
               </div>
             </div>
 
             <div class="px-5 mt-5 space-y-1">
               <div class="px-4 py-5 rounded-md shadow-lg text-center bg-red-500 text-white font-semibold">
-                Order food
+                Place order
               </div>
               <div class="px-4 py-5 rounded-md shadow-lg text-center bg-yellow-500 text-white font-semibold">
                 Pay With Cash
