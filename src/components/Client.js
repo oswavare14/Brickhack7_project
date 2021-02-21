@@ -7,14 +7,14 @@ function Client() {
     const [menu, setMenu] = useState([]);
     const [total, setTotal] = useState(() => { return 0 });
 
-    const agrega = () => {
-        db.collection("Facturas").doc("123").set({
-            Nombre: "oswaldo",
-            Apellido: "si"
+    const generarFactura = () => {
+        
+        db.collection("Facturas").doc("XQDDWDOPQMDPW!@NP").set({
+            DocID: "XQDDWDOPQMDPW!@NP",
+            Total: total,
+            Menu: menu
         }).then(() => {
-            console.log("funciona")
         }).catch(() => {
-            console.log("no funciona")
         })
     }
 
@@ -313,7 +313,7 @@ function Client() {
                                         <div class="font-semibold text-base w-16 text-center">
                                             ${value}.00 x{cantidad}
                                         </div>
-                                        <div><button className="bg-red-500 h-6 w-6 text-white" name={name} onClick={handleRemoveItem}>x</button></div>
+                                        <div><button className="bg-red-500 h-6 w-6 text-white" name={name} onClick={handleRemoveItem}>X</button></div>
                                     </div>
                                 </div>)
                             })
@@ -348,13 +348,13 @@ function Client() {
                         <div class="px-5 mt-5 space-y-1">
                             <div class="px-4 py-5 rounded-md shadow-lg text-center bg-red-500 text-white font-semibold">
                                 Place order
-              </div>
-                            <div class="px-4 py-5 rounded-md shadow-lg text-center bg-yellow-500 text-white font-semibold">
+                            </div>
+                            <div class="px-4 py-5 rounded-md shadow-lg text-center bg-yellow-500 text-white font-semibold" onClick={generarFactura}>
                                 Pay With Cash
-              </div>
-                            <div class="px-4 py-5 rounded-md shadow-lg text-center bg-yellow-500 text-white font-semibold">
+                            </div>
+                            <div class="px-4 py-5 rounded-md shadow-lg text-center bg-yellow-500 text-white font-semibold" onClick={generarFactura}>
                                 Pay With Credis/Debit Card
-              </div>
+                            </div>
                         </div>
 
                     </div>
